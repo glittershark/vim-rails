@@ -794,6 +794,8 @@ function! s:readable_calculate_file_type() dict abort
     let r = "config-routes"
   elseif f =~ '\<config/'
     let r = "config"
+  elseif f =~ '\<app/jobs/.*\.rb$'
+    let r = "job"
   endif
   return r
 endfunction
@@ -3919,6 +3921,9 @@ function! rails#buffer_syntax()
         syn match rubyRailsMethod '\.\zs\%(connect\|named_route\)\>'
         syn keyword rubyRailsMethod match get put patch post delete redirect root resource resources collection member nested scope namespace controller constraints mount concern
       endif
+      if buffer.type_name('job')
+        syn keyword rubyRailsJobMethod queue_as arguments before_enqueue after_enqueue around_enqueue before_perform after_perform around_perform rescue_from
+      endif
       syn keyword rubyRailsMethod debugger
       syn keyword rubyRailsMethod alias_attribute alias_method_chain attr_accessor_with_default attr_internal attr_internal_accessor attr_internal_reader attr_internal_writer concerning delegate mattr_accessor mattr_reader mattr_writer superclass_delegating_accessor superclass_delegating_reader superclass_delegating_writer with_options
       syn keyword rubyRailsMethod cattr_accessor cattr_reader cattr_writer class_inheritable_accessor class_inheritable_array class_inheritable_array_writer class_inheritable_hash class_inheritable_hash_writer class_inheritable_option class_inheritable_reader class_inheritable_writer inheritable_attributes read_inheritable_attribute reset_inheritable_attributes write_inheritable_array write_inheritable_attribute write_inheritable_hash
@@ -3991,6 +3996,7 @@ function! s:HiDefaults()
   hi def link rubyRailsMigrationMethod        rubyRailsMethod
   hi def link rubyRailsControllerMethod       rubyRailsMethod
   hi def link rubyRailsFilterMethod           rubyRailsMethod
+  hi def link rubyRailsJobMethod              rubyRailsMethod
   hi def link rubyRailsTestControllerMethod   rubyRailsTestMethod
   hi def link rubyRailsTestViewMethod         rubyRailsTestMethod
   hi def link rubyRailsTestHelperMethod       rubyRailsTestMethod
